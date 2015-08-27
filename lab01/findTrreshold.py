@@ -1,10 +1,11 @@
+# for part a,b
 
 res = 1000000
 
 genuine = [0]*(res+1)
 imposter = [0]*(res+1)
 
-with open('L4.txt') as infile:
+with open('L4_1000.txt') as infile:
 	for lineNo in infile:
 		temp = lineNo.split('\t')
 		line = (float(temp[5][:-1]), int(temp[4]))

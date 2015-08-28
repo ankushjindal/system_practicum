@@ -1,6 +1,6 @@
 # for part g
 
-current_point = (1,11)
+current_point = (1,1)
 minS = 1.0
 minLine = ''
 maxS = 0.0

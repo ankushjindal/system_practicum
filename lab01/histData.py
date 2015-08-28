@@ -20,5 +20,6 @@ with open('L4_1000.txt') as infile:
 				iHist[tempScore]+=1
 			else:
 				iHist[tempScore]=1
+pprint(gHist)
 
 # pprint([(x,iHist[x]) for x in iHist if iHist[x]>2])

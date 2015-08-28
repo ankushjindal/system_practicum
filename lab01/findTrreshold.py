@@ -26,5 +26,4 @@ for i in range(len(genuine)):
 final = []
 for i in range(res+1):
 	final.append(abs(genuine[i]-imposter[i]))
-print(final.index(min(final)))
-
+print(final.index(min(final))) #eer

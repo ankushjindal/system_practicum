@@ -3,7 +3,7 @@
 # man, help, comments A
 # quit S
 # file input shell A
-# clear T
+# clear T - Done 
 # arrow - history - char matching T
 
 import os
@@ -77,6 +77,15 @@ def pause(cmd):
 	"""​Pause Operation of shell until ‘Enter ’ is pressed"""
 	input()
 
+def clear(cmd):
+	# os.system('clear')
+	# print("\n" * 100 )
+	# print(chr(27) + "[2J")
+	print("\x1b[2J\x1b[H") 
+	# The string is a series of ANSI escape codes. \x1b[ is a control sequence introducer (hex 0x1B). Code 2J clears the entire screen.
+	# Code H sets the cursor position, and without arguments defaults to the top left corner.
+
+
 while True:
 	cmd = input(pwd + '$ ').split()
 	if cmd[0] == 'cd':
@@ -87,6 +96,8 @@ while True:
 		environ(cmd)
 	elif cmd[0] == 'echo':
 		echo(cmd)
+	elif cmd[0] == 'clear' or cmd[0] == 'cls' or cmd[0] == 'clr':
+		clear(cmd)
 	elif cmd[0] == 'pause':
 		pause(cmd)
 	elif cmd[0] == 'help':

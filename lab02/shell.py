@@ -1,3 +1,11 @@
+# color A
+# autocomplete S
+# man, help, comments A
+# quit S
+# file input shell A
+# clear T
+# arrow - history - char matching T
+
 import os
 
 pwd = os.getcwd()

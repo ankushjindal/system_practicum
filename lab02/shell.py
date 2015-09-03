@@ -6,8 +6,6 @@
 # clear T
 # arrow - history - char matching T
 
-import os
-
 pwd = os.getcwd()
 
 def cd(cmd):

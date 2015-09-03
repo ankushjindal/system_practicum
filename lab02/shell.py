@@ -1,4 +1,4 @@
-# color A
+# color and graphics - columns, more, ...A
 # autocomplete S
 # man, help, comments A
 # quit S
@@ -7,6 +7,7 @@
 # arrow - history - char matching T
 
 import os
+
 pwd = os.getcwd()
 
 def cd(cmd):
@@ -73,34 +74,23 @@ def echo(cmd):
 	print(comment)
 
 def pause(cmd):
-	"""
-	​Pause Operation of shell until ‘Enter ’ is pressed
-	"""
-	# while(True):
+	"""​Pause Operation of shell until ‘Enter ’ is pressed"""
 	input()
-		# if (request[-1] == '\n'):
-			# break
 
 while True:
 	cmd = input(pwd + '$ ').split()
-
 	if cmd[0] == 'cd':
 		cd(cmd)
-
 	elif cmd[0] == 'dir' or cmd[0] == 'ls':
 		dir(cmd)
-
 	elif cmd[0] == 'environ' or cmd[0] == 'env' or cmd[0] == 'environment' or cmd[0] == 'envi':
 		environ(cmd)
-	
 	elif cmd[0] == 'echo':
 		echo(cmd)
-
 	elif cmd[0] == 'pause':
 		pause(cmd)
-
 	elif cmd[0] == 'help':
 		help(cmd)		
-
 	elif cmd[0] == 'quit':
+		quit(cmd)	elif cmd[0] == 'quit':
 		quit(cmd)			

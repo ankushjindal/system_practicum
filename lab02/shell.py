@@ -90,7 +90,10 @@ while True:
 	elif cmd[0] == 'pause':
 		pause(cmd)
 	elif cmd[0] == 'help':
-		help(cmd)		
+		pass
+		# help(cmd)		
 	elif cmd[0] == 'quit':
-		quit(cmd)	elif cmd[0] == 'quit':
-		quit(cmd)			
+		pass
+		# quit(cmd)	elif cmd[0] == 'quit':
+		# quit(cmd)	
+		

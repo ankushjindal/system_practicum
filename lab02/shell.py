@@ -75,7 +75,7 @@ BLACKBG='\033[40m'
 CLEAR='\x1b[2J\x1b[H'
 #tweak this to change the graphics and use this only
 #don't, I repeat don't change the options in print commands
-DEFAULT = ENDC+BLACKBG+OKBLUE+BOLD
+DEFAULT = ENDC+BLACKBG+OKBLUE+BOLD+CLEAR
 FAILBG = ENDC+BLACKBG+FAIL
 HEADERBG = ENDC+BLACKBG+HEADER+UNDERLINE
 CONTENT = ENDC+BLACKBG+OKGREEN
@@ -247,10 +247,17 @@ if len(sys.argv) == 2:
 
 else:
 	while True:
+		try:
+			print(DEFAULT)
+			cmd = input(pwd + '$ '+INPUT)
+			readline.add_history(cmd)
+			cmd = cmd.split()
 
-		print(DEFAULT)
-		cmd = input(pwd + '$ '+INPUT)
-		readline.add_history(cmd)
-		cmd = cmd.split()
-
-		main(cmd)
+			main(cmd)
+		except KeyboardInterrupt:
+        	print 'Interrupted'
+        	quit("Adiós Amigo")
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)

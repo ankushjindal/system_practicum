@@ -2,7 +2,6 @@ ls
 ls /
 cd /
 cd ~
-cd ..
+cd /home/ankush
 pwd
 ls
-quit

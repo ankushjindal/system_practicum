@@ -12,6 +12,8 @@ import os
 import sys
 import readline
 import signal
+import getpass
+
 class MyCompleter(object):  # Custom completer
 	def __init__(self, options):
 		self.options = sorted(options)
@@ -125,8 +127,8 @@ pwd = os.getcwd()
 
 def cd(cmd):
 	global pwd
+	temp_pwd = pwd
 	try:	
-		temp_pwd = pwd
 		second = cmd[1]
 		if second[0] == '/':
 			pwd = '/'
@@ -155,7 +157,7 @@ def cd_iterative(path_list):
 			if (pwd==''):
 				pwd='/'
 			try_the_directory = os.listdir(pwd)
-		except FileNotFoundError:
+		except:
 			print(FAILBG+'Error: cd: ' + path + ' does not exist!'+DEFAULT)
 			pwd = temp_pwd
 			break
@@ -196,16 +198,34 @@ def echo(cmd):
 
 def pause(cmd):
 	"""​Pause Operation of shell until ‘Enter ’ is pressed"""
-	input()
+	getpass.getpass("Termoinal Paused")
+	# input()
 
 def clear():
 	# print(chr(27) + "[2J")
 	# print "%c[2J" % (27)
 	print(CLEAR) 
 
-def help():
+def help(cmd):
 	clear()
-	print(CONTENT+"Available commands- cmd, dir, pwd, environ, echo, clr, pause, help, quit.\n\n"+BOLD+"cmd"+CONTENT+"\tusage: "+UNDERLINE+"cmd PATH"+CONTENT+"\n\tWill change the dircetory to the given path. If the given path does not exists, it tries to go to "+UNDERLINE+"nearest path possible"+CONTENT+". The path could be absoulte or relative.\n\n"+BOLD+"dir"+CONTENT+"\tusage: "+UNDERLINE+"dir [PATH]"+CONTENT+"\n\tWill list all the files of the path mentioned. If no path is mentioned it lists the file of the current directory\n\n"+BOLD+"pwd"+CONTENT+"\tusage: "+UNDERLINE+"pwd"+CONTENT+"\n\tWill return the current directory.\n\n"+BOLD+"environ"+CONTENT+"\tusage: "+UNDERLINE+"environ"+CONTENT+"\n\tWill list all the defined environment variables of the terminal\n\n"+BOLD+"echo"+CONTENT+"\tusage: "+UNDERLINE+"echo COMMENT"+CONTENT+"\n\tDisplay ​<comment> ​ on the display followed by a new line. ( Multiple spaces/tabs are reduced to a single space).\n\n"+BOLD+"clr"+CONTENT+"\tusage: "+UNDERLINE+"clr"+CONTENT+"\n\tWill clear the screen.\n\n"+BOLD+"pause"+CONTENT+"\tusage: "+UNDERLINE+"pause"+CONTENT+"\n\tPause Operation of shell until 'Enter' is pressed.\n\n"+BOLD+"help"+CONTENT+"\tusage: "+UNDERLINE+"help"+CONTENT+"\n\tHelp for the complete shell and all the commands.\n\n"+BOLD+"quit"+CONTENT+"\tusage: "+UNDERLINE+"quit"+CONTENT+"\n\tQuit the shell.\n\n"+DEFAULT)
+	if(cmd=='cd'):
+		print(BOLD+"cd"+CONTENT+"\tusage: "+UNDERLINE+"cmd PATH"+CONTENT+"\n\tWill change the dircetory to the given path. If the given path does not exists, it tries to go to "+UNDERLINE+"nearest path possible"+CONTENT+". The path could be absoulte or relative.\n\n"+DEFAULT)
+	elif(cmd=='dir'):
+		print(BOLD+"dir"+CONTENT+"\tusage: "+UNDERLINE+"dir [PATH]"+CONTENT+"\n\tWill list all the files of the path mentioned. If no path is mentioned it lists the file of the current directory\n\n"+DEFAULT)
+	elif(cmd=='pwd'):
+		print(BOLD+"pwd"+CONTENT+"\tusage: "+UNDERLINE+"pwd"+CONTENT+"\n\tWill return the current directory.\n\n"+DEFAULT)
+	elif(cmd=='environ'):
+		print(BOLD+"environ"+CONTENT+"\tusage: "+UNDERLINE+"environ"+CONTENT+"\n\tWill list all the defined environment variables of the terminal\n\n"+DEFAULT)
+	elif(cmd=='echo'):
+		print(BOLD+"echo"+CONTENT+"\tusage: "+UNDERLINE+"echo COMMENT"+CONTENT+"\n\tDisplay ​<comment> ​ on the display followed by a new line. ( Multiple spaces/tabs are reduced to a single space).\n\n"+DEFAULT)
+	elif(cmd=='pause'):
+		print(BOLD+"pause"+CONTENT+"\tusage: "+UNDERLINE+"pause"+CONTENT+"\n\tPause Operation of shell until 'Enter' is pressed.\n\n"+DEFAULT)
+	elif(cmd=='help'):
+		print(BOLD+"help"+CONTENT+"\tusage: "+UNDERLINE+"help"+CONTENT+"\n\tHelp for the complete shell and all the commands.\n\n"+DEFAULT)
+	elif(cmd=='quit'):
+		print(BOLD+"quit"+CONTENT+"\tusage: "+UNDERLINE+"quit"+CONTENT+"\n\tQuit the shell.\n\n"+DEFAULT)
+	else:
+		print(CONTENT+"Available commands- cd, dir, pwd, environ, echo, clr, pause, help, quit.\n\n"+BOLD+"cd"+CONTENT+"\tusage: "+UNDERLINE+"cmd PATH"+CONTENT+"\n\tWill change the dircetory to the given path. If the given path does not exists, it tries to go to "+UNDERLINE+"nearest path possible"+CONTENT+". The path could be absoulte or relative.\n\n"+BOLD+"dir"+CONTENT+"\tusage: "+UNDERLINE+"dir [PATH]"+CONTENT+"\n\tWill list all the files of the path mentioned. If no path is mentioned it lists the file of the current directory\n\n"+BOLD+"pwd"+CONTENT+"\tusage: "+UNDERLINE+"pwd"+CONTENT+"\n\tWill return the current directory.\n\n"+BOLD+"environ"+CONTENT+"\tusage: "+UNDERLINE+"environ"+CONTENT+"\n\tWill list all the defined environment variables of the terminal\n\n"+BOLD+"echo"+CONTENT+"\tusage: "+UNDERLINE+"echo COMMENT"+CONTENT+"\n\tDisplay ​<comment> ​ on the display followed by a new line. ( Multiple spaces/tabs are reduced to a single space).\n\n"+BOLD+"clr"+CONTENT+"\tusage: "+UNDERLINE+"clr"+CONTENT+"\n\tWill clear the screen.\n\n"+BOLD+"pause"+CONTENT+"\tusage: "+UNDERLINE+"pause"+CONTENT+"\n\tPause Operation of shell until 'Enter' is pressed.\n\n"+BOLD+"help"+CONTENT+"\tusage: "+UNDERLINE+"help"+CONTENT+"\n\tHelp for the complete shell and all the commands.\n\n"+BOLD+"quit"+CONTENT+"\tusage: "+UNDERLINE+"quit"+CONTENT+"\n\tQuit the shell.\n\n"+DEFAULT)
 
 def main(cmd):
 
@@ -223,7 +243,11 @@ def main(cmd):
 	elif cmd[0] == 'pause':
 		pause(cmd)
 	elif cmd[0] == 'help':
-		help()
+		if (len(cmd)!=1):
+			print(cmd[1])
+			help(cmd[1])
+		else:
+			help('complete')
 	elif cmd[0] == 'quit' or cmd[0] == 'exit':
 		print(HEADERBG+"Adiós Amigo"+ENDC)
 		os._exit(1)
@@ -234,7 +258,7 @@ def main(cmd):
 
 
 def hand(signum, frame):
-	pass
+	print('Ctrl+Z Interupt Ignored.\n')
 
 if len(sys.argv) == 2:
 	try:
@@ -245,14 +269,15 @@ if len(sys.argv) == 2:
 			# print("~~~~~~~~~")
 			cmd = cmd.split()
 			main(cmd)
+		print(ENDC+'hi')
 
 	except:
 		print(FAILBG+"Error: <" + sys.argv[1] +"> does not exist!"+DEFAULT)
 
-
 else:
 	while True:
 		try:
+			# print(pwd)
 			options = [x for x in os.listdir(pwd) if not x.startswith('.')]
 			completer = MyCompleter(options)
 			readline.set_completer(completer.complete)
@@ -269,6 +294,5 @@ else:
 		except KeyboardInterrupt:
 			print(HEADERBG+"Adiós Amigo"+ENDC)
 			os._exit(1)
-
 
 

@@ -1,7 +1,7 @@
 # color and graphics - columns, more, ...A
 # autocomplete S
 # man, help, comments A
-# quit S
+# quit - Done
 # file input shell A
 # clear T - Done 
 # arrow - history - char matching T
@@ -81,6 +81,7 @@ def dir(cmd):
 		print(x)
 
 def environ(cmd):
+	"""Prints the list of env variabls as <variable>: <value>. """
 	arr = os.environ
 	for k in arr:
 		print(k, ": " ,arr[k])
@@ -109,7 +110,7 @@ def clear(cmd):
 
 while True:
 	
-	options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help']
+	options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help', 'quit']
 	completer = MyCompleter(options)
 	readline.set_completer(completer.complete)
 	readline.parse_and_bind('tab: complete')
@@ -132,9 +133,7 @@ while True:
 		pause(cmd)
 	elif cmd[0] == 'help':
 		pass
-		# help(cmd)		
-	elif cmd[0] == 'quit':
-		pass
-		# quit(cmd)	elif cmd[0] == 'quit':
-		# quit(cmd)	
+	elif cmd[0] == 'quit' or cmd[0] == 'exit':
+		quit("Adiós Amigo")
+
 		

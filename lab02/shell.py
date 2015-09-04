@@ -252,12 +252,12 @@ else:
 			cmd = input(pwd + '$ '+INPUT)
 			readline.add_history(cmd)
 			cmd = cmd.split()
-
 			main(cmd)
+		
 		except KeyboardInterrupt:
-        	print 'Interrupted'
-        	quit("Adiós Amigo")
-        try:
-            sys.exit(0)
-        except SystemExit:
-            os._exit(0)
+			print('Interrupted')
+			quit("Adiós Amigo")
+		try:
+			sys.exit(0)
+		except SystemExit:
+			os._exit(0)

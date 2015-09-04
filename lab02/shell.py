@@ -13,10 +13,8 @@ import sys
 import readline
 
 class MyCompleter(object):  # Custom completer
-
 	def __init__(self, options):
 		self.options = sorted(options)
-	
 	def _listdir(self, root):
 		"List directory 'root' appending the path separator to subdirs."
 		res = []
@@ -26,7 +24,6 @@ class MyCompleter(object):  # Custom completer
 				name += os.sep
 			res.append(name)
 		return res
-
 	def _complete_path(self, path=None):
 		"Perform completion of filesystem path."
 		if not path:
@@ -43,14 +40,12 @@ class MyCompleter(object):  # Custom completer
 			return [os.path.join(path, p) for p in self._listdir(path)]
 		# exact file match terminates this completion
 		return [path + ' ']
-
 	def complete_extra(self, args):
 		"Completions for the 'extra' command."
 		if not args:
 			return self._complete_path('.')
 		# treat the last arg as a path and complete it
 		return self._complete_path(args[-1])
-
 	def complete(self, text, state):
 		if state == 0:  # on first trigger, build possible matches
 			if text:  # cache matches (entries that start with entered text)
@@ -65,12 +60,52 @@ class MyCompleter(object):  # Custom completer
 		except IndexError:
 			return None
 
+### GRAPHICS ###
+HEADER = '\033[95m'
+OKBLUE = '\033[94m'
+OKGREEN = '\033[92m'
+WARNING = '\033[93m'
+FAIL = '\033[91m'
+ENDC = '\033[0m'
+BOLD = '\033[1m'
+UNDERLINE = '\033[4m'
+BLACKBG='\033[40m'
+CLEAR='\x1b[2J\x1b[H'
+#tweak this to change the graphics and use this only
+#don't, I repeat don't change the options in print commands
+DEFAULT = ENDC+BLACKBG+OKBLUE+BOLD
+FAILBG = ENDC+BLACKBG+FAIL
+HEADERBG = ENDC+BLACKBG+HEADER+UNDERLINE
+CONTENT = ENDC+BLACKBG+OKGREEN
+INPUT = ENDC+BLACKBG
+# class bg:
+# 	red='\033[41m'
+# 	green='\033[42m'
+# 	orange='\033[43m'
+# 	blue='\033[44m'
+# 	purple='\033[45m'
+# 	cyan='\033[46m'
+# 	lightgrey='\033[47m'
+# def green(s):
+# 	return bcolors.OKGREEN+s+bcolors.ENDC
+# def blue(s):
+# 	return bcolors.OKBLUE+s+bcolors.ENDC
+# def yellow(s):
+# 	return bcolors.WARNING+s+bcolors.ENDC
+# def violet(s):
+# 	return bcolors.HEADER+s+bcolors.ENDC
+# def red(s):
+# 	return bcolors.FAIL+s+bcolors.ENDC
+# def bold(s):
+# 	return bcolors.BOLD+s+bcolors.ENDC
+# def underline(s):
+# 	return bcolors.UNDERLINE+s+bcolors.ENDC
+################
 
 pwd = os.getcwd()
 
 def cd(cmd):
 	global pwd
-	
 	try:	
 		temp_pwd = pwd
 		second = cmd[1]
@@ -84,11 +119,10 @@ def cd(cmd):
 			path_list = list(filter(None,second.split('/')))
 		cd_iterative(path_list)
 	except:
-		print("Current directory:", pwd, "\nUsage: cd <dir_name>")
+		print(FAILBG+"Current directory:", pwd, "\nUsage: cd <dir_name>"+DEFAULT)
 
 def cd_iterative(path_list):
 	global pwd
-	
 	for path in path_list:
 		temp_pwd = pwd
 		if path == '..':
@@ -103,7 +137,7 @@ def cd_iterative(path_list):
 				pwd='/'
 			try_the_directory = os.listdir(pwd)
 		except FileNotFoundError:
-			print('Error: cd: ' + path + ' does not exist!')
+			print(FAILBG+'Error: cd: ' + path + ' does not exist!'+DEFAULT)
 			pwd = temp_pwd
 			break
 
@@ -114,19 +148,20 @@ def dir(cmd):
 		temp_pwd = pwd
 		cd(['cd',second])
 		arr = [x for x in os.listdir(pwd) if not x.startswith('.')]
-		print('dir of '+pwd)
+		print(HEADERBG+'dir of '+pwd+'->'+DEFAULT)
 		pwd = temp_pwd
 	except:
-		print('dir of '+pwd)
+		print(HEADERBG+'dir of '+pwd+'->'+DEFAULT)
 		arr = [x for x in os.listdir(pwd) if not x.startswith('.')]
 	for x in arr:
-		print(x)
+		print(CONTENT+x+DEFAULT)
 
 def environ(cmd):
 	"""Prints the list of env variabls as <variable>: <value>. """
 	arr = os.environ
+	print(HEADERBG+'environment variables->'+DEFAULT)
 	for k in arr:
-		print(k, ": " ,arr[k])
+		print(CONTENT+k, ": " ,arr[k]+DEFAULT)
 
 def echo(cmd):
 	"""echo <comment>​­ Display <comment>​on the display followed by a new line. 
@@ -135,16 +170,19 @@ def echo(cmd):
 	for x in cmd:
 		if(x != '\t' and x != 'echo'):
 			comment += x + ' '
-	print(comment)
+	print(CONTENT+comment+DEFAULT)
+
 
 def pause(cmd):
 	"""​Pause Operation of shell until ‘Enter ’ is pressed"""
 	input()
 
 def clear(cmd):
+	# os.system('clear')
+	# print("\n" * 100 )	
 	# print(chr(27) + "[2J")
 	# print "%c[2J" % (27)
-	print("\x1b[2J\x1b[H") 
+	print(CLEAR) 
 	# The string is a series of ANSI escape codes. \x1b[ is a control sequence introducer (hex 0x1B). Code 2J clears the entire screen.
 	# Code H sets the cursor position, and without arguments defaults to the top left corner.
 
@@ -193,7 +231,8 @@ if len(sys.argv) == 2:
 else:
 	while True:
 
-		cmd = input(pwd + '$ ')
+		print(DEFAULT)
+		cmd = input(pwd + '$ '+INPUT)
 		readline.add_history(cmd)
 		cmd = cmd.split()
 

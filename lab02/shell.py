@@ -1,3 +1,5 @@
+#! /bin/bash python
+
 # color and graphics - columns, more, ...A
 # autocomplete S
 # man, help, comments A
@@ -147,23 +149,16 @@ def clear(cmd):
 	# Code H sets the cursor position, and without arguments defaults to the top left corner.
 
 options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help', 'quit']
-# history file 
-histfile = os.path.join(os.environ['HOME'], '.pythonhistory') 
-try: 
-    readline.read_history_file(histfile) 
-except IOError: 
-    pass 
-history = MyCompleter(options)
-readline.set_completer(history.complete)
 completer = MyCompleter(options)
 readline.set_completer(completer.complete)
 readline.parse_and_bind('tab: complete')
-readline.parse_and_bind('history-previous: Up')
-readline.parse_and_bind('history-next: Down')
 
 if len(sys.argv) == 2:
-	file_name = sys.argv[1]
-	_file = open(file_name)
+	try:
+		file_name = pwd + '/' +sys.argv[1]
+		_file = open(file_name)
+	except:
+		print("Error: <" + sys.argv[1] +"> does not exist!")
 
 while True:
 

@@ -1,18 +1,53 @@
 # color and graphics - columns, more, ...A
 # autocomplete S
 # man, help, comments A
-# quit - Done
+# quit S - Done
 # file input shell A
 # clear T - Done 
-# arrow - history - char matching T
+# arrow - history - char matching S - Done
 
 import os
+import sys
 import readline
 
 class MyCompleter(object):  # Custom completer
 
 	def __init__(self, options):
 		self.options = sorted(options)
+	
+	def _listdir(self, root):
+		"List directory 'root' appending the path separator to subdirs."
+		res = []
+		for name in os.listdir(root):
+			path = os.path.join(root, name)
+			if os.path.isdir(path):
+				name += os.sep
+			res.append(name)
+		return res
+
+	def _complete_path(self, path=None):
+		"Perform completion of filesystem path."
+		if not path:
+			return self._listdir('.')
+		dirname, rest = os.path.split(path)
+		tmp = dirname if dirname else '.'
+		res = [os.path.join(dirname, p)
+				for p in self._listdir(tmp) if p.startswith(rest)]
+		# more than one match, or single match which does not exist (typo)
+		if len(res) > 1 or not os.path.exists(path):
+			return res
+		# resolved to a single directory, so return list of files below it
+		if os.path.isdir(path):
+			return [os.path.join(path, p) for p in self._listdir(path)]
+		# exact file match terminates this completion
+		return [path + ' ']
+
+	def complete_extra(self, args):
+		"Completions for the 'extra' command."
+		if not args:
+			return self._complete_path('.')
+		# treat the last arg as a path and complete it
+		return self._complete_path(args[-1])
 
 	def complete(self, text, state):
 		if state == 0:  # on first trigger, build possible matches
@@ -47,10 +82,11 @@ def cd(cmd):
 			path_list = list(filter(None,second.split('/')))
 		cd_iterative(path_list)
 	except:
-		print("Usage: 'cd <dir_name>'")
+		print("Current directory:", pwd, "\nUsage: cd <dir_name>")
 
 def cd_iterative(path_list):
 	global pwd
+	
 	for path in path_list:
 		temp_pwd = pwd
 		if path == '..':
@@ -116,8 +152,12 @@ completer = MyCompleter(options)
 readline.set_completer(completer.complete)
 readline.parse_and_bind('tab: complete')
 
+if len(sys.argv) == 2:
+	file_name = sys.argv[1]
+	_file = open(file_name)
+
 while True:
-	
+
 	cmd = input(pwd + '$ ')
 	readline.add_history(cmd)
 	cmd = cmd.split()
@@ -138,5 +178,7 @@ while True:
 		pass
 	elif cmd[0] == 'quit' or cmd[0] == 'exit':
 		quit("Adiós Amigo")
+	elif cmd[0]	 == 'pwd':
+		print(pwd)
 
 		

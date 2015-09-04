@@ -104,8 +104,6 @@ def pause(cmd):
 	input()
 
 def clear(cmd):
-	# os.system('clear')
-	# print("\n" * 100 )
 	# print(chr(27) + "[2J")
 	# print "%c[2J" % (27)
 	print("\x1b[2J\x1b[H") 
@@ -113,9 +111,19 @@ def clear(cmd):
 	# Code H sets the cursor position, and without arguments defaults to the top left corner.
 
 options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help', 'quit']
+# history file 
+histfile = os.path.join(os.environ['HOME'], '.pythonhistory') 
+try: 
+    readline.read_history_file(histfile) 
+except IOError: 
+    pass 
+history = MyCompleter(options)
+readline.set_completer(history.complete)
 completer = MyCompleter(options)
 readline.set_completer(completer.complete)
 readline.parse_and_bind('tab: complete')
+readline.parse_and_bind('history-previous: Up')
+readline.parse_and_bind('history-next: Down')
 
 while True:
 	

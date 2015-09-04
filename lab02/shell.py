@@ -102,6 +102,24 @@ INPUT = ENDC+BLACKBG
 # 	return bcolors.BOLD+s+bcolors.ENDC
 # def underline(s):
 # 	return bcolors.UNDERLINE+s+bcolors.ENDC
+
+def pretty_columns(list_of_strings):
+	import sys, struct, fcntl, termios
+	s = struct.pack('HHHH', 0, 0, 0, 0)
+	t = fcntl.ioctl(sys.stdout.fileno(), termios.TIOCGWINSZ, s)
+	term_size = struct.unpack('HHHH', t)
+	col_width = max (len(word) for word in list_of_strings) + 2 #padding
+	# print(col_width)
+	possible_cols = int(term_size[1]/col_width)
+	# print(possible_cols)
+	matrix = to_matrix(list_of_strings,possible_cols)
+	for row in matrix:
+		print("".join(word.ljust(col_width) for word in row))
+
+def to_matrix(l,n):
+	return [l[i:i+n] for i in range(0, len(l), n)]
+
+
 ################
 
 pwd = os.getcwd()
@@ -155,9 +173,10 @@ def dir(cmd):
 	except:
 		print(HEADERBG+'dir of '+pwd+'->'+DEFAULT)
 		arr = [x for x in os.listdir(pwd) if not x.startswith('.')]
-	for x in arr:
-		print(CONTENT+x+DEFAULT)
-
+	print(CONTENT)
+	pretty_columns(arr)
+	print(DEFAULT)
+	
 def environ(cmd):
 	"""Prints the list of env variabls as <variable>: <value>. """
 	arr = os.environ

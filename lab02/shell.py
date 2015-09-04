@@ -81,6 +81,7 @@ def clear(cmd):
 	# os.system('clear')
 	# print("\n" * 100 )
 	# print(chr(27) + "[2J")
+	# print "%c[2J" % (27)
 	print("\x1b[2J\x1b[H") 
 	# The string is a series of ANSI escape codes. \x1b[ is a control sequence introducer (hex 0x1B). Code 2J clears the entire screen.
 	# Code H sets the cursor position, and without arguments defaults to the top left corner.

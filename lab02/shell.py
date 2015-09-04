@@ -28,6 +28,54 @@ class MyCompleter(object):  # Custom completer
 		except IndexError:
 			return None
 
+HEADER = '\033[95m'
+OKBLUE = '\033[94m'
+OKGREEN = '\033[92m'
+WARNING = '\033[93m'
+FAIL = '\033[91m'
+ENDC = '\033[0m'
+BOLD = '\033[1m'
+UNDERLINE = '\033[4m'
+BLACKBG='\033[40m'
+CLEAR='\x1b[2J\x1b[H'
+
+#tweak this to change the graphics
+#don't, I repeat don't change the options in print commands
+DEFAULT = ENDC+BLACKBG+OKBLUE+BOLD
+FAILBG = ENDC+BLACKBG+FAIL
+HEADERBG = ENDC+BLACKBG+HEADER+UNDERLINE
+CONTENT = ENDC+BLACKBG+OKGREEN
+INPUT = ENDC+BLACKBG
+# class bg:
+# 	red='\033[41m'
+# 	green='\033[42m'
+# 	orange='\033[43m'
+# 	blue='\033[44m'
+# 	purple='\033[45m'
+# 	cyan='\033[46m'
+# 	lightgrey='\033[47m'
+
+# def green(s):
+# 	return bcolors.OKGREEN+s+bcolors.ENDC
+
+# def blue(s):
+# 	return bcolors.OKBLUE+s+bcolors.ENDC
+
+# def yellow(s):
+# 	return bcolors.WARNING+s+bcolors.ENDC
+
+# def violet(s):
+# 	return bcolors.HEADER+s+bcolors.ENDC
+
+# def red(s):
+# 	return bcolors.FAIL+s+bcolors.ENDC
+
+# def bold(s):
+# 	return bcolors.BOLD+s+bcolors.ENDC
+
+# def underline(s):
+# 	return bcolors.UNDERLINE+s+bcolors.ENDC
+
 
 pwd = os.getcwd()
 
@@ -61,7 +109,7 @@ def cd_iterative(path_list):
 				pwd='/'
 			try_the_directory = os.listdir(pwd)
 		except FileNotFoundError:
-			print('ERROR')
+			print(FAILBG+'ERROR'+DEFAULT)
 			pwd = temp_pwd
 			break
 
@@ -72,18 +120,19 @@ def dir(cmd):
 		temp_pwd = pwd
 		cd(['cd',second])
 		arr = os.listdir(pwd)
-		print('dir of '+pwd)
+		print(HEADERBG+'dir of '+pwd+' >'+DEFAULT)
 		pwd = temp_pwd
 	except:
-		print('dir of '+pwd)
+		print(HEADERBG+'dir of '+pwd+' >'+DEFAULT)
 		arr = os.listdir(pwd)
 	for x in arr:
-		print(x)
+		print(CONTENT+x+DEFAULT)
 
 def environ(cmd):
 	arr = os.environ
+	print(HEADERBG+'environment variables >'+DEFAULT)
 	for k in arr:
-		print(k, ": " ,arr[k])
+		print(CONTENT+k, ": " ,arr[k]+DEFAULT)
 
 def echo(cmd):
 	"""echo <comment>​­ Display <comment>​on the display followed by a new line. 
@@ -92,7 +141,7 @@ def echo(cmd):
 	for x in cmd:
 		if(x != '\t' and x != 'echo'):
 			comment += x + ' '
-	print(comment)
+	print(CONTENT+comment+DEFAULT)
 
 def pause(cmd):
 	"""​Pause Operation of shell until ‘Enter ’ is pressed"""
@@ -102,19 +151,19 @@ def clear(cmd):
 	# os.system('clear')
 	# print("\n" * 100 )
 	# print(chr(27) + "[2J")
-	print("\x1b[2J\x1b[H") 
+	print(CLEAR) 
 	# The string is a series of ANSI escape codes. \x1b[ is a control sequence introducer (hex 0x1B). Code 2J clears the entire screen.
 	# Code H sets the cursor position, and without arguments defaults to the top left corner.
 
 
 while True:
-	
-	options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help']
+	print(DEFAULT)
+	options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help','quit']
 	completer = MyCompleter(options)
 	readline.set_completer(completer.complete)
 	readline.parse_and_bind('tab: complete')
 	
-	cmd = input(pwd + '$ ')
+	cmd = input(pwd + '$ '+INPUT)
 	readline.add_history(cmd)
 	cmd = cmd.split()
 
@@ -134,7 +183,5 @@ while True:
 		pass
 		# help(cmd)		
 	elif cmd[0] == 'quit':
-		pass
-		# quit(cmd)	elif cmd[0] == 'quit':
-		# quit(cmd)	
-		
+		print(HEADER+'Exiting'+ENDC)
+		quit()

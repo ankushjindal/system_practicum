@@ -11,7 +11,7 @@
 import os
 import sys
 import readline
-
+import signal
 class MyCompleter(object):  # Custom completer
 	def __init__(self, options):
 		self.options = sorted(options)
@@ -75,7 +75,7 @@ BLACKBG='\033[40m'
 CLEAR='\x1b[2J\x1b[H'
 #tweak this to change the graphics and use this only
 #don't, I repeat don't change the options in print commands
-DEFAULT = ENDC+BLACKBG+OKBLUE+BOLD+CLEAR
+DEFAULT = ENDC+BLACKBG+OKBLUE+BOLD
 FAILBG = ENDC+BLACKBG+FAIL
 HEADERBG = ENDC+BLACKBG+HEADER+UNDERLINE
 CONTENT = ENDC+BLACKBG+OKGREEN
@@ -227,6 +227,10 @@ def main(cmd):
 		print("Error: <" + cmd[0] + "> not found!\nType help.")
 
 
+def hand(signum, frame):
+		pass
+
+
 options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help', 'quit']
 completer = MyCompleter(options)
 readline.set_completer(completer.complete)
@@ -245,19 +249,18 @@ if len(sys.argv) == 2:
 	except:
 		print("Error: <" + sys.argv[1] +"> does not exist!")
 
+
 else:
 	while True:
+
 		try:
+			signal.signal(signal.SIGTSTP, hand)
 			print(DEFAULT)
 			cmd = input(pwd + '$ '+INPUT)
 			readline.add_history(cmd)
 			cmd = cmd.split()
 			main(cmd)
-		
+
 		except KeyboardInterrupt:
 			print('Interrupted')
 			quit("Adiós Amigo")
-		try:
-			sys.exit(0)
-		except SystemExit:
-			os._exit(0)

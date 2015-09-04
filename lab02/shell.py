@@ -11,7 +11,7 @@
 import os
 import sys
 import readline
-
+import signal
 class MyCompleter(object):  # Custom completer
 	def __init__(self, options):
 		self.options = sorted(options)
@@ -208,6 +208,7 @@ def help():
 	print(CONTENT+"Available commands- cmd, dir, pwd, environ, echo, clr, pause, help, quit.\n\n"+BOLD+"cmd"+CONTENT+"\tusage: "+UNDERLINE+"cmd PATH"+CONTENT+"\n\tWill change the dircetory to the given path. If the given path does not exists, it tries to go to "+UNDERLINE+"nearest path possible"+CONTENT+". The path could be absoulte or relative.\n\n"+BOLD+"dir"+CONTENT+"\tusage: "+UNDERLINE+"dir [PATH]"+CONTENT+"\n\tWill list all the files of the path mentioned. If no path is mentioned it lists the file of the current directory\n\n"+BOLD+"pwd"+CONTENT+"\tusage: "+UNDERLINE+"pwd"+CONTENT+"\n\tWill return the current directory.\n\n"+BOLD+"environ"+CONTENT+"\tusage: "+UNDERLINE+"environ"+CONTENT+"\n\tWill list all the defined environment variables of the terminal\n\n"+BOLD+"echo"+CONTENT+"\tusage: "+UNDERLINE+"echo COMMENT"+CONTENT+"\n\tDisplay ​<comment> ​ on the display followed by a new line. ( Multiple spaces/tabs are reduced to a single space).\n\n"+BOLD+"clr"+CONTENT+"\tusage: "+UNDERLINE+"clr"+CONTENT+"\n\tWill clear the screen.\n\n"+BOLD+"pause"+CONTENT+"\tusage: "+UNDERLINE+"pause"+CONTENT+"\n\tPause Operation of shell until 'Enter' is pressed.\n\n"+BOLD+"help"+CONTENT+"\tusage: "+UNDERLINE+"help"+CONTENT+"\n\tHelp for the complete shell and all the commands.\n\n"+BOLD+"quit"+CONTENT+"\tusage: "+UNDERLINE+"quit"+CONTENT+"\n\tQuit the shell.\n\n"+DEFAULT)
 
 def main(cmd):
+
 	if cmd[0] == 'cd':
 		cd(cmd)
 	elif cmd[0] == 'dir' or cmd[0] == 'ls':
@@ -232,15 +233,8 @@ def main(cmd):
 		print(FAILBG+"Error: <" + cmd[0] + "> not found!\nType help."+DEFAULT)
 
 
-print(DEFAULT)
-options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help', 'quit']
-print(DEFAULT)
-completer = MyCompleter(options)
-print(DEFAULT)
-readline.set_completer(completer.complete)
-print(DEFAULT)
-readline.parse_and_bind('tab: complete')
-print(DEFAULT)
+def hand(signum, frame):
+	pass
 
 if len(sys.argv) == 2:
 	try:
@@ -255,13 +249,26 @@ if len(sys.argv) == 2:
 	except:
 		print(FAILBG+"Error: <" + sys.argv[1] +"> does not exist!"+DEFAULT)
 
+
 else:
 	while True:
 		try:
+			options = [x for x in os.listdir(pwd) if not x.startswith('.')]
+			completer = MyCompleter(options)
+			readline.set_completer(completer.complete)
+			readline.parse_and_bind('tab: complete')
+			signal.signal(signal.SIGTSTP, hand)
 			print(DEFAULT)
 			cmd = input(pwd + '$ '+INPUT)
 			readline.add_history(cmd)
-			cmd = cmd.split()
-			main(cmd)
-		except:
-			pass
+			try:
+				cmd = cmd.split()
+				main(cmd)
+			except:
+				continue
+		except KeyboardInterrupt:
+			print(HEADERBG+"Adiós Amigo"+ENDC)
+			os._exit(1)
+
+
+

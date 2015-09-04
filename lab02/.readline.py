@@ -2,8 +2,7 @@ import os
 import re
 import readline
 
-COMMANDS = ['extra', 'extension', 'stuff', 'errors',
-			'email', 'foobar', 'foo']
+COMMANDS = ['extra', 'extension', 'stuff', 'errors','email', 'foobar', 'foo']
 RE_SPACE = re.compile('.*\s+$', re.M)
 
 class Completer(object):

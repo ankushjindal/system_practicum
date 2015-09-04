@@ -70,6 +70,8 @@ ENDC = '\033[0m'
 BOLD = '\033[1m'
 UNDERLINE = '\033[4m'
 BLACKBG='\033[40m'
+# The string is a series of ANSI escape codes. \x1b[ is a control sequence introducer (hex 0x1B). Code 2J clears the entire screen.
+# Code H sets the cursor position, and without arguments defaults to the top left corner.
 CLEAR='\x1b[2J\x1b[H'
 #tweak this to change the graphics and use this only
 #don't, I repeat don't change the options in print commands
@@ -178,13 +180,9 @@ def pause(cmd):
 	input()
 
 def clear(cmd):
-	# os.system('clear')
-	# print("\n" * 100 )	
 	# print(chr(27) + "[2J")
 	# print "%c[2J" % (27)
 	print(CLEAR) 
-	# The string is a series of ANSI escape codes. \x1b[ is a control sequence introducer (hex 0x1B). Code 2J clears the entire screen.
-	# Code H sets the cursor position, and without arguments defaults to the top left corner.
 
 def main(cmd):
 

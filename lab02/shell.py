@@ -118,10 +118,9 @@ def pretty_columns(list_of_strings):
 
 def to_matrix(l,n):
 	return [l[i:i+n] for i in range(0, len(l), n)]
-
-
 ################
 
+print(DEFAULT+CLEAR)
 pwd = os.getcwd()
 
 def cd(cmd):
@@ -179,10 +178,11 @@ def dir(cmd):
 	
 def environ(cmd):
 	"""Prints the list of env variabls as <variable>: <value>. """
-	arr = os.environ
+	# arr = os.environ
+	arr = globals()
 	print(HEADERBG+'environment variables->'+DEFAULT)
 	for k in arr:
-		print(CONTENT+k, ": " ,arr[k]+DEFAULT)
+		print(INPUT+BOLD+k+CONTENT+ ": "+str(arr[k])+DEFAULT)
 
 def echo(cmd):
 	"""echo <comment>​­ Display <comment>​on the display followed by a new line. 
@@ -198,39 +198,49 @@ def pause(cmd):
 	"""​Pause Operation of shell until ‘Enter ’ is pressed"""
 	input()
 
-def clear(cmd):
+def clear():
 	# print(chr(27) + "[2J")
 	# print "%c[2J" % (27)
 	print(CLEAR) 
 
-def main(cmd):
+def help():
+	clear()
+	print(CONTENT+"Available commands- cmd, dir, pwd, environ, echo, clr, pause, help, quit.\n\n"+BOLD+"cmd"+CONTENT+"\tusage: "+UNDERLINE+"cmd PATH"+CONTENT+"\n\tWill change the dircetory to the given path. If the given path does not exists, it tries to go to "+UNDERLINE+"nearest path possible"+CONTENT+". The path could be absoulte or relative.\n\n"+BOLD+"dir"+CONTENT+"\tusage: "+UNDERLINE+"dir [PATH]"+CONTENT+"\n\tWill list all the files of the path mentioned. If no path is mentioned it lists the file of the current directory\n\n"+BOLD+"pwd"+CONTENT+"\tusage: "+UNDERLINE+"pwd"+CONTENT+"\n\tWill return the current directory.\n\n"+BOLD+"environ"+CONTENT+"\tusage: "+UNDERLINE+"environ"+CONTENT+"\n\tWill list all the defined environment variables of the terminal\n\n"+BOLD+"echo"+CONTENT+"\tusage: "+UNDERLINE+"echo COMMENT"+CONTENT+"\n\tDisplay ​<comment> ​ on the display followed by a new line. ( Multiple spaces/tabs are reduced to a single space).\n\n"+BOLD+"clr"+CONTENT+"\tusage: "+UNDERLINE+"clr"+CONTENT+"\n\tWill clear the screen.\n\n"+BOLD+"pause"+CONTENT+"\tusage: "+UNDERLINE+"pause"+CONTENT+"\n\tPause Operation of shell until 'Enter' is pressed.\n\n"+BOLD+"help"+CONTENT+"\tusage: "+UNDERLINE+"help"+CONTENT+"\n\tHelp for the complete shell and all the commands.\n\n"+BOLD+"quit"+CONTENT+"\tusage: "+UNDERLINE+"quit"+CONTENT+"\n\tQuit the shell.\n\n"+DEFAULT)
 
+def main(cmd):
 	if cmd[0] == 'cd':
 		cd(cmd)
 	elif cmd[0] == 'dir' or cmd[0] == 'ls':
 		dir(cmd)
 	elif cmd[0] == 'environ' or cmd[0] == 'env' or cmd[0] == 'environment' or cmd[0] == 'envi':
 		environ(cmd)
+		# print (globals())
 	elif cmd[0] == 'echo':
 		echo(cmd)
 	elif cmd[0] == 'clear' or cmd[0] == 'cls' or cmd[0] == 'clr':
-		clear(cmd)
+		clear()
 	elif cmd[0] == 'pause':
 		pause(cmd)
 	elif cmd[0] == 'help':
-		pass
+		help()
 	elif cmd[0] == 'quit' or cmd[0] == 'exit':
-		quit("Adiós Amigo")
-	elif cmd[0]	 == 'pwd':
+		print(HEADERBG+"Adiós Amigo"+ENDC)
+		os._exit(1)
+	elif cmd[0] == 'pwd':
 		print(pwd)
 	else:
-		print("Error: <" + cmd[0] + "> not found!\nType help.")
+		print(FAILBG+"Error: <" + cmd[0] + "> not found!\nType help."+DEFAULT)
 
 
+print(DEFAULT)
 options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help', 'quit']
+print(DEFAULT)
 completer = MyCompleter(options)
+print(DEFAULT)
 readline.set_completer(completer.complete)
+print(DEFAULT)
 readline.parse_and_bind('tab: complete')
+print(DEFAULT)
 
 if len(sys.argv) == 2:
 	try:
@@ -238,19 +248,20 @@ if len(sys.argv) == 2:
 		_file = open(file_name)
 
 		for cmd in _file:
-			print("~~~~~~~~~")
+			# print("~~~~~~~~~")
 			cmd = cmd.split()
 			main(cmd)
 
 	except:
-		print("Error: <" + sys.argv[1] +"> does not exist!")
+		print(FAILBG+"Error: <" + sys.argv[1] +"> does not exist!"+DEFAULT)
 
 else:
 	while True:
-
-		print(DEFAULT)
-		cmd = input(pwd + '$ '+INPUT)
-		readline.add_history(cmd)
-		cmd = cmd.split()
-
-		main(cmd)
+		try:
+			print(DEFAULT)
+			cmd = input(pwd + '$ '+INPUT)
+			readline.add_history(cmd)
+			cmd = cmd.split()
+			main(cmd)
+		except:
+			pass

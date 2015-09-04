@@ -1,4 +1,4 @@
-#! /bin/bash python
+#! /usr/bin/env python3
 
 # color and graphics - columns, more, ...A
 # autocomplete S
@@ -148,23 +148,7 @@ def clear(cmd):
 	# The string is a series of ANSI escape codes. \x1b[ is a control sequence introducer (hex 0x1B). Code 2J clears the entire screen.
 	# Code H sets the cursor position, and without arguments defaults to the top left corner.
 
-options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help', 'quit']
-completer = MyCompleter(options)
-readline.set_completer(completer.complete)
-readline.parse_and_bind('tab: complete')
-
-if len(sys.argv) == 2:
-	try:
-		file_name = pwd + '/' +sys.argv[1]
-		_file = open(file_name)
-	except:
-		print("Error: <" + sys.argv[1] +"> does not exist!")
-
-while True:
-
-	cmd = input(pwd + '$ ')
-	readline.add_history(cmd)
-	cmd = cmd.split()
+def main(cmd):
 
 	if cmd[0] == 'cd':
 		cd(cmd)
@@ -184,5 +168,33 @@ while True:
 		quit("Adiós Amigo")
 	elif cmd[0]	 == 'pwd':
 		print(pwd)
+	else:
+		print("Error: <" + cmd[0] + "> not found!\nType help.")
 
-		
+
+options = ['cd', 'dir', 'ls', 'environ', 'env', 'echo', 'clear', 'pause', 'help', 'quit']
+completer = MyCompleter(options)
+readline.set_completer(completer.complete)
+readline.parse_and_bind('tab: complete')
+
+if len(sys.argv) == 2:
+	try:
+		file_name = pwd + '/' +sys.argv[1]
+		_file = open(file_name)
+
+		for cmd in _file:
+			print("~~~~~~~~~")
+			cmd = cmd.split()
+			main(cmd)
+
+	except:
+		print("Error: <" + sys.argv[1] +"> does not exist!")
+
+else:
+	while True:
+
+		cmd = input(pwd + '$ ')
+		readline.add_history(cmd)
+		cmd = cmd.split()
+
+		main(cmd)

@@ -25,4 +25,3 @@ if __name__ == '__main__':
 	parent_process = Process(target=parent, args=(X,))
 	parent_process.start()
 	parent_process.join()
-

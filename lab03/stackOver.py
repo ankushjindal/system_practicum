@@ -8,18 +8,18 @@ def test_f(test_d):
 	"""
 	test_d['2'] = 2     ## change to test this
 	while not test_d["QUIT"]:
-			print("test_f", test_d["QUIT"])
-			test_d["ctr"] += 1
-			time.sleep(1.0)
+		print("test_f", test_d["QUIT"])
+		test_d["ctr"] += 1
+		time.sleep(1.0)
 
 def test_f2(name):
-		""" second process to run.  Runs until the for loop exits
-		"""
-		for j in range(0, 10):
-			print(name, j)
-			time.sleep(0.5)
+	""" second process to run.  Runs until the for loop exits
+	"""
+	for j in range(0, 10):
+		print(name, j)
+		time.sleep(0.5)
 
-print("second process finished")
+	print("second process finished")
 
 
 if __name__ == '__main__':

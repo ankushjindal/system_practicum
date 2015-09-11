@@ -17,10 +17,10 @@ def recfunc(i,n):
 		print (nprimes(n))
 	elif i ==2:
 		print("Process Grand-Child:")		
-		# print (nfib(n))
+		print (nfib(n))
 	elif i == 3:
 		print("Process great Grand-Child:")
-		# print (intersect_fib_primes(n))
+		print (intersect_fib_primes(n))
 	else:
 		return
 	process1 = Process(target=recfunc, args=(i+1,n,))

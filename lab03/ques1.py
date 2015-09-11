@@ -9,29 +9,33 @@ site = "http://goo.gl/3v6wUh"
 
 def info(title):
 	print(title)
-	print('module name:', __name__)
-	if hasattr(os, 'getppid'):  # only available on Unix
-		print('parent process:', os.getppid())
-	print('process id:', os.getpid() )
+	# print('module name:', __name__)
+	# if hasattr(os, 'getppid'):  # only available on Unix
+	# 	print('parent process:', os.getppid())
+	# print('process id:', os.getpid() )
 
 def file_edit(name):
+	info('file_edit: Start')
 	with open(file_name, "ab+") as f:
 		for line in f:
 			line = line.replace(" ","\t")
-	info('file_edit')
+	info('file_edit: End')
 
 def sleep_fn(duration):
+	info('Sleep Fn: Start')
 	time.sleep(duration)
-	info('Sleep Fn')
+	info('Sleep Fn: End')
 
 def open_browser(site):
+	info('Open Chrome: Start')
 	webbrowser.open(site)
-	info('Open Chrome')
+	info('Open Chrome: End')
 
 def fork_bomb():
+	info('Fork Bomb: Start')
 	for x in range(1000):
 		pass
-	info('Fork Bomb')
+	info('Fork Bomb: End')
 
 def fork_bomb2():
 	info("Dummy Fork!")

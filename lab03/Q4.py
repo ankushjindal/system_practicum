@@ -5,44 +5,50 @@ import psutil
 
 X, Y = .001, .001
 
+def shinny_print(func):
+	def temp_wrap():
+		info(func.__name__+': START')
+		func()
+		info(func.__name__+': END')
+	return temp_wrap
+
+def shinny_print1(func):
+	def temp_wrap(arg1):
+		info(func.__name__+': START')
+		func(arg1)
+		info(func.__name__+': END')
+	return temp_wrap
+
 def info(title):
 	print(title)
 
-def child_1(test_d):
-	info('C1: Start')
-	x = "Shubham"
 
+@shinny_print1
+def child_1(test_d):
+	x = "Shubham"
 	ans = ""
 	for i in x:
 		ans += chr(ord(i)+10)
 	print(ans)
-
 	test_d["encrypt"] = ans
-	info('C1: End')
 
+@shinny_print
 def child_2():
-	info('C2: Start')
 	os.system("espeak < espeak")
-	info('C2 : End')
 
+@shinny_print
 def child_3():
-	info('C3 : Start')
-
 	file_old = open("espeak")
 	file_new = open("espeak_new", "w+")
 	for x in file_old:
 		file_new.write(x)
 
-	info('C3 : End')
-
+@shinny_print1
 def child_4(test_d):
-	info('C4 : Start')
-	
 	cup_usage = psutil.cpu_times()
 	print(cup_usage)
 	test_d["cpu"] = cup_usage
 
-	info('C4 : End')
 
 def parent(x):
 	c1 = Process(target=child_1,args=(test_d,))

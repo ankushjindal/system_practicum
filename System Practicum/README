@@ -1,0 +1,25 @@
+
+# main.py
+
+-	The main.py in given the test data.	It creates two arrays Genuine and Imposter, with a range of `res`. 
+
+-	Every index i, store number of Genuine and Imposter between i and i+res respectively.
+
+-	The cummulative of both the arrays stores total number of Genuine/Imposter at that corresponding index.
+
+- The cummulative array is divided by total number of Genuine/Imposter to obtain FRR and FAR.
+
+- The final array stores abs difference of the two array, the index of minimum of final gives the threshold.
+
+# FAR.py and FRR.py
+
+- The ground truth, 1/0 is seen and score is compared against threshold, correspondingly entry corresponding to FAR and FRR are printed.
+
+# CRR.py
+
+- Every (Subject1, PhotoID1) is compared against all corresponding (Subject2, PhotoID2), the lowest and higgest score is noted.
+
+- If the Subject1 == Subject2 for lowest entry, rank=1 is printed in last column.
+
+- (Total number of 1 )/ (Total entries) gives CRR
+

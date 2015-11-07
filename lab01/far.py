@@ -11,3 +11,4 @@ with open('L4_1000.txt') as infile:
 			if (float(temp[5][:-1])<eer):
 				#far
 				print lineNo
+

@@ -1,4 +1,5 @@
-from pylab import plot, show, title, xlabel, ylabel, subplot, savefig
+# from sympy.plotting import plot
+from pylab import  plot,show, title, xlabel, ylabel, subplot, savefig
 from scipy import fft, arange, ifft
 from numpy import sin, linspace, pi
 from scipy.io.wavfile import read,write
@@ -19,7 +20,7 @@ def plotSpectru(y,Fs):
 
 Fs = 44100;  # sampling rate
 
-rate,data=read('/test.wav')
+rate,data=read('output.wav')
 y=data[:,1]
 lungime=len(y)
 timp=len(y)/44100.

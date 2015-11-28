@@ -25,7 +25,6 @@ stream.stop_stream()
 stream.close()
 p.terminate()
 
-
 wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
 wf.setnchannels(CHANNELS)
 wf.setsampwidth(p.get_sample_size(FORMAT))
